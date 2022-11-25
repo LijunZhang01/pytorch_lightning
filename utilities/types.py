@@ -24,7 +24,9 @@ from typing import Any, Dict, Generator, List, Mapping, Optional, Sequence, Type
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
-from torchmetrics import Metric
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torchmetrics import Metric
 from typing_extensions import Protocol, runtime_checkable
 
 from lightning_lite.utilities.types import _LRScheduler, ProcessGroup, ReduceLROnPlateau
