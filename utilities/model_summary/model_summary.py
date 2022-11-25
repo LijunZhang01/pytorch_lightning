@@ -22,7 +22,10 @@ import torch
 import torch.nn as nn
 from lightning_utilities.core.rank_zero import WarningCache
 from torch import Tensor
-from torch.utils.hooks import RemovableHandle
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.utils.hooks import RemovableHandle
 
 import pytorch_lightning as pl
 
