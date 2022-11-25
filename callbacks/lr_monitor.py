@@ -23,7 +23,10 @@ import itertools
 from collections import defaultdict
 from typing import Any, DefaultDict, Dict, List, Optional, Set, Tuple, Type
 
-from torch.optim.optimizer import Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.optim.optimizer import Optimizer
 
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.callback import Callback

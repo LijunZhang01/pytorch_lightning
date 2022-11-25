@@ -22,7 +22,10 @@ from typing import Any, Callable, Dict, Generator, Iterable, List, Optional, Uni
 import torch
 from torch.nn import Module, ModuleDict
 from torch.nn.modules.batchnorm import _BatchNorm
-from torch.optim.optimizer import Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.optim.optimizer import Optimizer
 
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.callback import Callback
