@@ -17,7 +17,10 @@ from typing import Any, Dict, List, Optional
 
 import torch
 from torch import Tensor
-from torch.optim.optimizer import Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.optim.optimizer import Optimizer
 
 from pytorch_lightning.utilities import move_data_to_device
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
