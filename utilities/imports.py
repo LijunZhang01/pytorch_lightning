@@ -35,15 +35,17 @@ _HABANA_FRAMEWORK_AVAILABLE = package_available("habana_frameworks")
 _HIVEMIND_AVAILABLE = package_available("hivemind")
 _HOROVOD_AVAILABLE = module_available("horovod.torch")
 import oneflow.mock_torch as mock
-
-_KINETO_AVAILABLE = torch.profiler.kineto_available()
+with mock.disable():
+    import torch
+    _KINETO_AVAILABLE = torch.profiler.kineto_available()
 _OMEGACONF_AVAILABLE = package_available("omegaconf")
 _POPTORCH_AVAILABLE = package_available("poptorch")
 _PSUTIL_AVAILABLE = package_available("psutil")
 _RICH_AVAILABLE = package_available("rich") and compare_version("rich", operator.ge, "10.2.2")
 import oneflow.mock_torch as mock
-
-_TORCH_QUANTIZE_AVAILABLE = bool([eg for eg in torch.backends.quantized.supported_engines if eg != "none"])
+with mock.disable():
+    import torch
+    _TORCH_QUANTIZE_AVAILABLE = bool([eg for eg in torch.backends.quantized.supported_engines if eg != "none"])
 _TORCHVISION_AVAILABLE = RequirementCache("torchvision")
 
 if _POPTORCH_AVAILABLE:
