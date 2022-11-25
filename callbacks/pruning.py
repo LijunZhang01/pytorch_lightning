@@ -20,8 +20,10 @@ import logging
 from copy import deepcopy
 from functools import partial
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Union
-
-import torch.nn.utils.prune as pytorch_prune
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    import torch.nn.utils.prune as pytorch_prune
 from lightning_utilities.core.apply_func import apply_to_collection
 from torch import nn, Tensor
 from typing_extensions import TypedDict
