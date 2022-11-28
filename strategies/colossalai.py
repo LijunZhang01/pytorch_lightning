@@ -18,7 +18,10 @@ from lightning_utilities.core.imports import RequirementCache
 from lightning_utilities.core.rank_zero import rank_zero_warn
 from torch import Tensor
 from torch.nn import Module
-from torch.optim.optimizer import Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.optim.optimizer import Optimizer
 from typing_extensions import OrderedDict
 
 import pytorch_lightning as pl

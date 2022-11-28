@@ -20,7 +20,10 @@ import torch
 import torch.distributed
 from torch import Tensor
 from torch.nn import Module
-from torch.nn.parallel.distributed import DistributedDataParallel
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.nn.parallel.distributed import DistributedDataParallel
 from typing_extensions import Literal
 
 import pytorch_lightning as pl

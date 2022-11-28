@@ -15,7 +15,11 @@ from typing import Any, Optional, Union
 
 import torch
 import torch.nn as nn
-from torch.nn import DataParallel
+
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.nn import DataParallel
 from torch.nn.parallel import DistributedDataParallel
 
 import pytorch_lightning as pl

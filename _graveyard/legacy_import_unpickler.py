@@ -2,7 +2,11 @@ import pickle
 import warnings
 from typing import Any, Callable
 
-import torchmetrics
+
+import oneflow.mock_torch as mock
+with mock.disable():
+
+    import torchmetrics
 from lightning_utilities.core.imports import compare_version as _compare_version
 
 
@@ -33,14 +37,20 @@ def compare_version(package: str, op: Callable, version: str, use_base_version: 
 # which has to be redirected to the unified package:
 # https://github.com/Lightning-AI/metrics/blob/v0.7.3/torchmetrics/metric.py#L96
 try:
-    if hasattr(torchmetrics.utilities.imports, "_compare_version"):
-        torchmetrics.utilities.imports._compare_version = compare_version  # type: ignore
+    import oneflow.mock_torch as mock
+    with mock.disable():
+    
+        if hasattr(torchmetrics.utilities.imports, "_compare_version"):
+            torchmetrics.utilities.imports._compare_version = compare_version  # type: ignore
 except AttributeError:
     pass
 
 try:
-    if hasattr(torchmetrics.metric, "_compare_version"):
-        torchmetrics.metric._compare_version = compare_version  # type: ignore
+    import oneflow.mock_torch as mock
+    with mock.disable():
+
+        if hasattr(torchmetrics.metric, "_compare_version"):
+            torchmetrics.metric._compare_version = compare_version  # type: ignore
 except AttributeError:
     pass
 pickle.Unpickler = RedirectingUnpickler  # type: ignore

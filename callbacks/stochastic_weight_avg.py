@@ -20,7 +20,11 @@ from typing import Any, Callable, cast, Dict, List, Optional, Union
 
 import torch
 from torch import nn, Tensor
-from torch.optim.swa_utils import SWALR
+
+import oneflow.mock_torch as mock
+with mock.disable():
+    
+    from torch.optim.swa_utils import SWALR
 
 import pytorch_lightning as pl
 from lightning_lite.utilities.types import _LRScheduler

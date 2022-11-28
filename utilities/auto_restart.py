@@ -18,7 +18,11 @@ from functools import partial, wraps
 from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Tuple, Union
 
 from lightning_utilities.core.apply_func import apply_to_collection
-from torch.utils.data import Dataset, DistributedSampler, get_worker_info, RandomSampler, Sampler, SequentialSampler
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.utils.data import get_worker_info
+from torch.utils.data import Dataset, DistributedSampler, RandomSampler, Sampler, SequentialSampler
 from torch.utils.data.dataloader import (
     _BaseDataLoaderIter,
     _MultiProcessingDataLoaderIter,

@@ -16,7 +16,10 @@ from typing import Any, Callable, Optional, TYPE_CHECKING, Union
 from lightning_utilities.core.imports import RequirementCache
 from lightning_utilities.core.rank_zero import WarningCache
 from torch import Tensor
-from torch.optim import LBFGS, Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torch.optim import LBFGS
+from torch.optim import Optimizer
 
 import pytorch_lightning as pl
 from lightning_lite.utilities.enums import AMPType, PrecisionType

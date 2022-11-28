@@ -17,7 +17,9 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import torch.distributed
 from torch.nn import Module
-from torch.optim.optimizer import Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torch.optim.optimizer import Optimizer
 
 import pytorch_lightning as pl
 from lightning_lite.plugins import CheckpointIO, ClusterEnvironment

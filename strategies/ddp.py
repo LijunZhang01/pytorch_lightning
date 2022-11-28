@@ -25,8 +25,10 @@ import torch
 import torch.distributed
 from torch import Tensor
 from torch.nn import Module
-from torch.nn.parallel.distributed import DistributedDataParallel
-from torch.optim.optimizer import Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torch.nn.parallel.distributed import DistributedDataParallel
+    from torch.optim.optimizer import Optimizer
 
 import pytorch_lightning as pl
 from lightning_lite.plugins import CheckpointIO, ClusterEnvironment

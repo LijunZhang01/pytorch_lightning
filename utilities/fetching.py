@@ -333,12 +333,14 @@ class InterBatchParallelDataFetcher(DataFetcher):
         event = torch.cuda.Event()
         self._start_profiler()
         return event
-
-    def on_fetch_end(self, batch: Any, event: torch.cuda.Event) -> None:
-        self._stop_profiler()
-        self.batches.append(batch)
-        event.record()
-        self.events.append(event)
+    import oneflow.mock_torch as mock
+    with mock.disable():
+        import torch
+        def on_fetch_end(self, batch: Any, event: torch.cuda.Event) -> None:
+            self._stop_profiler()
+            self.batches.append(batch)
+            event.record()
+            self.events.append(event)
 
     def wait(self) -> None:
         # pop first event from the queue and wait for the batch to be available on device.

@@ -41,8 +41,10 @@ from pytorch_lightning.utilities.imports import _TORCH_GREATER_EQUAL_1_12
 from pytorch_lightning.utilities.model_helpers import is_overridden
 from pytorch_lightning.utilities.rank_zero import rank_zero_info, rank_zero_only
 from pytorch_lightning.utilities.types import STEP_OUTPUT
-
-_distributed_available = torch.distributed.is_available()
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    _distributed_available = torch.distributed.is_available()
 _fsdp_available = _TORCH_GREATER_EQUAL_1_12 and _distributed_available
 if _fsdp_available:
     from torch.distributed.fsdp.fully_sharded_data_parallel import (
@@ -57,9 +59,11 @@ else:
     MixedPrecision = None  # type: ignore[misc,assignment]
     BackwardPrefetch = None  # type: ignore[misc,assignment]
     CPUOffload = None  # type: ignore[misc,assignment]
-
-if _distributed_available:
-    from torch.distributed.distributed_c10d import _get_default_group
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    if _distributed_available:
+        from torch.distributed.distributed_c10d import _get_default_group
 
 log = logging.getLogger(__name__)
 

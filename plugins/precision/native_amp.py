@@ -16,7 +16,11 @@ from typing import Any, Callable, Dict, Generator, Optional, Union
 
 import torch
 from torch import Tensor
-from torch.optim import LBFGS, Optimizer
+# from torch.optim import LBFGS, Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torch.optim import LBFGS
+from torch.optim import Optimizer
 
 import pytorch_lightning as pl
 from lightning_lite.accelerators.cuda import _patch_cuda_is_available
@@ -28,7 +32,9 @@ from pytorch_lightning.utilities.exceptions import MisconfigurationException
 if _TORCH_GREATER_EQUAL_1_10:
     from torch import autocast as new_autocast
 else:
-    from torch.cuda.amp import autocast as old_autocast
+    import oneflow.mock_torch as mock
+    with mock.disable():
+        from torch.cuda.amp import autocast as old_autocast
 
 
 class NativeMixedPrecisionPlugin(PrecisionPlugin):
@@ -41,24 +47,26 @@ class NativeMixedPrecisionPlugin(PrecisionPlugin):
     """
 
     backend = AMPType.NATIVE
+    import oneflow.mock_torch as mock
+    with mock.disable():
 
-    def __init__(
-        self, precision: Union[str, int], device: str, scaler: Optional[torch.cuda.amp.GradScaler] = None
-    ) -> None:
-        super().__init__()
-        if precision == "bf16" and not _TORCH_GREATER_EQUAL_1_10:
-            raise MisconfigurationException(
-                "To use bfloat16 with native amp you must install torch greater or equal to 1.10."
-            )
-        if scaler is None and precision == 16:
-            with _patch_cuda_is_available():
-                # if possible, we defer CUDA initialization to support strategies that will attempt forks
-                scaler = torch.cuda.amp.GradScaler()
-        if scaler is not None and precision == "bf16":
-            raise MisconfigurationException(f"`precision='bf16'` does not use a scaler, found {scaler}.")
-        self.precision = precision
-        self.device = device
-        self.scaler = scaler
+        def __init__(
+            self, precision: Union[str, int], device: str, scaler: Optional[torch.cuda.amp.GradScaler] = None
+        ) -> None:
+            super().__init__()
+            if precision == "bf16" and not _TORCH_GREATER_EQUAL_1_10:
+                raise MisconfigurationException(
+                    "To use bfloat16 with native amp you must install torch greater or equal to 1.10."
+                )
+            if scaler is None and precision == 16:
+                with _patch_cuda_is_available():
+                    # if possible, we defer CUDA initialization to support strategies that will attempt forks
+                    scaler = torch.cuda.amp.GradScaler()
+            if scaler is not None and precision == "bf16":
+                raise MisconfigurationException(f"`precision='bf16'` does not use a scaler, found {scaler}.")
+            self.precision = precision
+            self.device = device
+            self.scaler = scaler
 
     def pre_backward(self, tensor: Tensor, module: "pl.LightningModule") -> Tensor:  # type: ignore[override]
         if self.scaler is not None:

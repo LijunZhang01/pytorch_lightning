@@ -13,11 +13,18 @@ _unpickler = pickle.Unpickler
 
 logger = logging.getLogger(__name__)
 
-_TORCH_DISTRIBUTED_AVAILABLE = torch.distributed.is_available()
 
-if _TORCH_DISTRIBUTED_AVAILABLE:
-    from torch._C._distributed_c10d import ProcessGroup
-    from torch.distributed import Backend, broadcast, get_backend, get_rank, GroupMember
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    _TORCH_DISTRIBUTED_AVAILABLE = torch.distributed.is_available()
+
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    if _TORCH_DISTRIBUTED_AVAILABLE:
+        from torch._C._distributed_c10d import ProcessGroup
+        from torch.distributed import Backend, broadcast, get_backend, get_rank, GroupMember
 
 # The code underneath is taken from PyTorch `torch/distributed/distributed_c10d.py`
 # the distributed backend and tensor type updates for habana backend is done here before broadcast

@@ -22,7 +22,10 @@ import torch
 from fsspec.core import url_to_fs
 from fsspec.implementations.local import LocalFileSystem
 from torch import Tensor
-from torchmetrics import Metric
+import oneflow.mock_torch as mock
+with mock.disable():
+    
+    from torchmetrics import Metric
 
 import pytorch_lightning as pl
 from lightning_lite.plugins.environments.slurm import SLURMEnvironment

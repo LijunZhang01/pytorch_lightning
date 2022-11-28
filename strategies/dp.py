@@ -16,8 +16,11 @@ from typing import Any, Dict, List, Optional, Union
 import torch
 from lightning_utilities.core.apply_func import apply_to_collection
 from torch import Tensor
-from torch.nn import DataParallel, Module
-
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.nn import DataParallel
+from torch.nn import Module
 import pytorch_lightning as pl
 from lightning_lite.plugins import CheckpointIO
 from lightning_lite.utilities.distributed import ReduceOp

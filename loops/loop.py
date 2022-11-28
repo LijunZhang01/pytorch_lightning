@@ -14,8 +14,10 @@
 import inspect
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union
-
-from torchmetrics import Metric
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torchmetrics import Metric
 
 import pytorch_lightning as pl
 from pytorch_lightning.trainer.connectors.logger_connector.result import _ResultCollection

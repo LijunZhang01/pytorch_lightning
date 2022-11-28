@@ -22,7 +22,10 @@ from typing import Any, Callable, ContextManager, Dict, List, Optional, Type, TY
 import torch
 from lightning_utilities.core.rank_zero import WarningCache
 from torch import nn, Tensor
-from torch.autograd.profiler import record_function
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    from torch.autograd.profiler import record_function
 
 from lightning_lite.accelerators.cuda import is_cuda_available
 from pytorch_lightning.profilers.profiler import Profiler
@@ -36,13 +39,18 @@ if TYPE_CHECKING:
 
     from pytorch_lightning.core.module import LightningModule
 
-if _KINETO_AVAILABLE:
-    from torch.profiler import ProfilerAction, ProfilerActivity, tensorboard_trace_handler
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    if _KINETO_AVAILABLE:
+        from torch.profiler import ProfilerAction, ProfilerActivity, tensorboard_trace_handler
 
 log = logging.getLogger(__name__)
 warning_cache = WarningCache()
-
-_PROFILER = Union[torch.profiler.profile, torch.autograd.profiler.profile, torch.autograd.profiler.emit_nvtx]
+import oneflow.mock_torch as mock
+with mock.disable():
+    import torch
+    _PROFILER = Union[torch.profiler.profile, torch.autograd.profiler.profile, torch.autograd.profiler.emit_nvtx]
 
 
 class RegisterRecordFunction:

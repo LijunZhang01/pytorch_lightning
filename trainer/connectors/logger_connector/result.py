@@ -19,7 +19,9 @@ import torch
 from lightning_utilities.core.apply_func import apply_to_collection, apply_to_collections
 from lightning_utilities.core.rank_zero import WarningCache
 from torch import Tensor
-from torchmetrics import Metric
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torchmetrics import Metric
 from typing_extensions import TypedDict
 
 from lightning_lite.utilities import move_data_to_device

@@ -14,7 +14,10 @@
 from typing import Any, Callable, Dict, Optional
 
 from torch import Tensor
-from torch.optim import LBFGS, Optimizer
+import oneflow.mock_torch as mock
+with mock.disable():
+    from torch.optim import LBFGS
+from torch.optim import Optimizer
 
 import pytorch_lightning as pl
 from lightning_lite.utilities.types import _PARAMETERS, Optimizable
